@@ -8,7 +8,7 @@ import (
     "io/ioutil"
     "os"
     "io"
-
+    "strconv"
 )
 
 type Transaction struct {
@@ -69,7 +69,7 @@ func main() {
             data.Status = 3
 
             money := GetMoney()
-            money.LastPrice = request.Form.Get("noticeType")
+            money.LastPrice, _ = strconv.ParseFloat(request.Form.Get("price"), 64)
             break
         case "ORDER_FINISH":
             data.Status = 2
