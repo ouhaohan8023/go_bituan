@@ -49,14 +49,25 @@ func main() {
     http.HandleFunc("/", func(w http.ResponseWriter, request *http.Request) {
         fmt.Println(time.Now())
         fmt.Println("接收到异步请求")
-        request.ParseForm()//获取请求参数
+        // request.ParseForm()//获取请求参数
         
         uri := request.URL.String()
         method := request.Method
         
         fmt.Println(uri, method)
 
-        mjson,_ :=json.Marshal(request.PostForm)
+        
+
+        // 根据请求body创建一个json解析器实例
+        decoder := json.NewDecoder(request.Body)
+
+        // 用于存放参数key=value数据
+        var params map[string]string
+
+        // 解析参数 存入map
+        decoder.Decode(&params)
+
+        mjson,_ :=json.Marshal(params)
         mString :=string(mjson)
         fmt.Println("异步数据")
         fmt.Println(mString)

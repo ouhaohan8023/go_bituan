@@ -97,12 +97,12 @@ func CreateOrder(price float64, side string, volume float64) {
 
 	ctx, _ := Get(url, nil)
 
-	// fmt.Println(ctx)
+	// fmt.Println(ctx, ctx["code"], ctx["code"] == 0, ctx["code"] == "0")
     code := ctx["code"]
 
 	fmt.Println(time.Now())
 
-    if code != 0 {
+    if code != "0" {
     	fmt.Println("下单失败，失败原因", ctx["msg"])
     } else {
     	fmt.Println("下单成功，等待异步", timestamp)
