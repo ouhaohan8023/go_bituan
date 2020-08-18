@@ -28,6 +28,23 @@ func GetLastTransaction() (t *Transaction){
     return stb
 }
 
+type Money struct {
+    UsdtQty     float64
+    BtcQty      float64
+    LastPrice   float64
+}
+
+func GetMoney() (money *Money){
+    var fileName = "money"
+    f, err := ioutil.ReadFile(fileName)
+    if err != nil {
+        fmt.Println("read fail", err)
+    }
+    stb := &Money{}
+    err = json.Unmarshal([]byte(f), &stb)
+    return stb
+}
+
 func main() {
     http.HandleFunc("/", func(w http.ResponseWriter, request *http.Request) {
         fmt.Println(time.Now())
@@ -50,6 +67,9 @@ func main() {
         switch noticeType {
         case "DEAL_CREATE":
             data.Status = 3
+
+            money := GetMoney()
+            money.LastPrice = request.Form.Get("noticeType")
             break
         case "ORDER_FINISH":
             data.Status = 2

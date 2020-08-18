@@ -20,42 +20,41 @@ import (
 )
 
 func main() {
-	t := GetLastTransaction()
-    fmt.Println(t.Price, t.Types, t.Status)
+	CreateOrder(12355.00, "SELL", 0.001)
+	// t := GetLastTransaction()
+ //    fmt.Println(t.Price, t.Types, t.Status)
 
-    if t.Status != 3 {
-    	fmt.Println("等待上一笔订单执行完毕，终止本次任务")
-    } else {
-	    c := GetPrice()
-	    fmt.Println("买入价格：" + strconv.FormatFloat(c.BidPrice, 'f', 2, 64))
-	    fmt.Println("可买入数量：" + strconv.FormatFloat(c.BidQty, 'f', 4, 64))
-	    fmt.Println("卖出数量：" + strconv.FormatFloat(c.AskPrice, 'f', 2, 64))
-	    fmt.Println("可卖出数量：" + strconv.FormatFloat(c.AskQty, 'f', 4, 64))
+ //    if t.Status != 3 {
+ //    	fmt.Println("等待上一笔订单执行完毕，终止本次任务")
+ //    } else {
+	//     c := GetPrice()
+	//     fmt.Println("买入价格：" + strconv.FormatFloat(c.BidPrice, 'f', 2, 64))
+	//     fmt.Println("可买入数量：" + strconv.FormatFloat(c.BidQty, 'f', 4, 64))
+	//     fmt.Println("卖出数量：" + strconv.FormatFloat(c.AskPrice, 'f', 2, 64))
+	//     fmt.Println("可卖出数量：" + strconv.FormatFloat(c.AskQty, 'f', 4, 64))
 
-	    money := GetMoney()
-	    fmt.Println(money.UsdtQty, money.BtcQty)
+	//     money := GetMoney()
+	//     fmt.Println(money.UsdtQty, money.BtcQty)
 
-	    
-
-	    if t.Types == 1 {
-	    	fmt.Println("上一笔为 USDT => BTC，当前需要将 BTC => USDT ， 上一次买入价格：" + strconv.FormatFloat(t.Price, 'f', 4, 64) + " 本次最快卖出价格 " + strconv.FormatFloat(c.BidPrice, 'f', 2, 64))
-	    	sub := c.BidPrice - t.Price
-	    	if sub > 0 {
-	    		fmt.Println("触发订单api")
-	    		CreateOrder(c.BidPrice, "SELL", money.BtcQty)
-	    	} else {
-	    		fmt.Println("无法触发")
-	    	}
-	    } else {
-	    	fmt.Println("上一笔为 BTC => USDT，当前需要将 USDT => BTC ， 上一次卖出价格：" + strconv.FormatFloat(t.Price, 'f', 4, 64) + " 本次最快买入价格 " + strconv.FormatFloat(c.AskPrice, 'f', 2, 64))
-	    	sub := c.AskPrice - t.Price
-	    	if sub > 0 {
-	    		fmt.Println("触发订单api")
-	    	} else {
-	    		fmt.Println("无法触发")
-	    	}
-	    }
-    }
+	//     if t.Types == 1 {
+	//     	fmt.Println("上一笔为 USDT => BTC，当前需要将 BTC => USDT ， 上一次买入价格：" + strconv.FormatFloat(t.Price, 'f', 4, 64) + " 本次最快卖出价格 " + strconv.FormatFloat(c.BidPrice, 'f', 2, 64))
+	//     	sub := c.BidPrice - t.Price
+	//     	if sub > 0 {
+	//     		fmt.Println("触发订单api")
+	//     		CreateOrder(c.BidPrice, "SELL", money.BtcQty)
+	//     	} else {
+	//     		fmt.Println("无法触发")
+	//     	}
+	//     } else {
+	//     	fmt.Println("上一笔为 BTC => USDT，当前需要将 USDT => BTC ， 上一次卖出价格：" + strconv.FormatFloat(t.Price, 'f', 4, 64) + " 本次最快买入价格 " + strconv.FormatFloat(c.AskPrice, 'f', 2, 64))
+	//     	sub := c.AskPrice - t.Price
+	//     	if sub > 0 {
+	//     		fmt.Println("触发订单api")
+	//     	} else {
+	//     		fmt.Println("无法触发")
+	//     	}
+	//     }
+ //    }
 
 
 }
@@ -80,7 +79,7 @@ type Transaction struct {
 }
 
 func CreateOrder(price float64, side string, volume float64) {
-	callback := `http://baidu.com`
+	callback := `http://124.156.119.73:3777`
 	timestamp := strconv.FormatInt(time.Now().UnixNano() / 1e6,10)
 	sign := md5V("api_keyeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJkYXRhSWQiOiIyMDIwMDgxNjA5MjYzNUEzRDlFMDM4LUI4MDctNDhGMi1BNURBLTE2M0MzMUY1NjRCMCIsImxhYmVsIjoidGVzdCIsImV4cCI6MTYwMDE4NTYwMCwianRpIjoiMjAyNDg1OCJ9._x-GwxVfsJhunTMPrSR4wQS2mbHD1X4Jlamg5XjKt24callbackUrl"+callback+"noticeId"+timestamp+"price"+strconv.FormatFloat(price, 'f', 2, 64)+"side"+side+"symbolbtcusdttime"+timestamp+"type1volume"+strconv.FormatFloat(volume, 'f', 4, 64)+"7f56b48d295b4bc2a8aec7b55a75fcea")
 	
